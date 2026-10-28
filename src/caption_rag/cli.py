@@ -113,10 +113,11 @@ def run(args: argparse.Namespace) -> None:
         method_metrics[method] = caption_metrics_per_image([r["caption"] for r in rows],
                                                             [r["references"] for r in rows])
         (out / f"metrics_{method}.json").write_text(json.dumps(scores, indent=2), encoding="utf-8")
+    inferential_metrics = ["bleu_4", "meteor", "rouge", "cider", "spice"]
     comparisons = {metric: paired_comparison(method_metrics["baseline"][metric],
                                               method_metrics["dense_rag"][metric],
-                                              comparisons=5)
-                   for metric in method_metrics["baseline"]}
+                                              comparisons=len(inferential_metrics))
+                   for metric in inferential_metrics}
     (out / "paired_statistics.json").write_text(json.dumps(comparisons, indent=2), encoding="utf-8")
     print(f"Wrote {len(result_rows)} caption rows and aggregate metrics to {out}")
 
