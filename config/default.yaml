@@ -1,0 +1,27 @@
+project:
+  seed: 2026
+  technique: dense
+  output_dir: outputs
+data:
+  root: data
+  train_images: 10000
+  validation_images: 100
+  test_images: 100
+  # Optional explicit COCO IDs, one integer per line. Shared course split should be used if supplied.
+  validation_ids: data/splits/validation_ids.txt
+  test_ids: data/splits/test_ids.txt
+models:
+  image_encoder: openai/clip-vit-base-patch32
+  captioner: Salesforce/blip-image-captioning-base
+  text_encoder: sentence-transformers/all-MiniLM-L6-v2
+  device: auto
+retrieval:
+  top_k: 5
+  candidate_pool: 20
+  metric: cosine
+generation:
+  max_new_tokens: 40
+  num_beams: 3
+evaluation:
+  metrics: [cider, bleu4, meteor, rouge_l, spice]
+  hallucination_sample_size: 200

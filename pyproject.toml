@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "coco-caption-rag-study"
+version = "0.1.0"
+description = "Reproducible comparison of retrieval-augmented image captioning methods on MS COCO."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = [
+  "numpy>=1.26,<3",
+  "pandas>=2.1,<4",
+  "Pillow>=10,<13",
+  "PyYAML>=6,<7",
+  "scipy>=1.11,<2",
+  "scikit-learn>=1.4,<2",
+  "matplotlib>=3.8,<4",
+  "tqdm>=4.66,<5",
+]
+
+[project.optional-dependencies]
+models = ["torch>=2.2", "transformers>=4.45,<6", "sentence-transformers>=3,<6", "faiss-cpu>=1.8"]
+metrics = ["pycocoevalcap>=1.2", "bert-score>=0.3.13"]
+dev = ["pytest>=8,<9", "ruff>=0.6,<1"]
+
+[project.scripts]
+caption-rag = "caption_rag.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
