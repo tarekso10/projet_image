@@ -1,10 +1,10 @@
 # Comparative RAG for Image Captioning
 
-Reproducible baseline-versus-dense-RAG study for MS COCO. The implementation uses BLIP for caption generation and CLIP image embeddings for image-to-image evidence retrieval. Each retrieved training image contributes its original human captions as evidence. The pipeline excludes self-retrieval and checks split IDs before processing.
+Reproducible study of **Contextual Compression RAG** for image captioning on MS COCO. The implementation uses BLIP for caption generation and CLIP image embeddings for image-to-image retrieval. Each retrieved training image contributes its original human captions. A CLIP image-text relevance scorer keeps up to four distinct captions within a 60-word budget. The pipeline excludes self-retrieval and checks split IDs before processing.
 
 ## Scope and assumptions
 
-The brief does not state the assigned group or provide the instructors' frozen split IDs. This repository implements **Naive/Dense RAG** as a configurable starting technique. Its local split is deterministic, but it is not a substitute for the course-wide stratified split. Put the shared validation/test IDs in `data/splits/validation_ids.txt` and `data/splits/test_ids.txt` before preparing data. The brief specifies both 100 and 1,000 test images in different sections; the common dataset section says 100, which is the default here. Change `config/default.yaml` only to match an instructor decision.
+The assigned technique is **Contextual Compression RAG** (G16–G18). Its ablation compares uncompressed dense retrieval against CLIP image-conditioned extractive compression. The compressor ranks retrieved captions by CLIP image-text relevance, removes near-duplicates, and enforces configured caption and word budgets; it does not rewrite captions. The local split is deterministic, but it is not a substitute for the course-wide stratified split. Put shared validation/test IDs in `data/splits/validation_ids.txt` and `data/splits/test_ids.txt` before preparing data. The brief specifies both 100 and 1,000 test images in different sections; the common dataset section says 100, which is the default here. Change `config/default.yaml` only to match an instructor decision.
 
 This workspace did not contain COCO data or model weights. Consequently, no experimental results are claimed yet. The report template records the required methods and pending result slots. COCO downloads and model checkpoints are large; source data and generated outputs are excluded from Git.
 
@@ -19,7 +19,7 @@ python -m pip install --upgrade pip
 pip install -e ".[models,metrics]"
 ```
 
-The `models` extra installs PyTorch, Transformers, Sentence Transformers, and FAISS. The current runner uses exact cosine search in NumPy for reproducibility; FAISS is available for scaling beyond the 10,000-image course subset. The `metrics` extra installs COCO caption scorers. SPICE may require a Java runtime. Select a compatible CPU or CUDA PyTorch build for the available hardware.
+The `models` extra installs PyTorch, Transformers, and FAISS. CLIP supplies both the image encoder and the text encoder used by the compressor. The current runner uses exact cosine search in NumPy for reproducibility; FAISS is available for scaling beyond the 10,000-image course subset. The `metrics` extra installs COCO caption scorers. SPICE may require a Java runtime. Select a compatible CPU or CUDA PyTorch build for the available hardware.
 
 ## Data layout and preparation
 
@@ -52,9 +52,9 @@ If shared ID files are absent, the command makes deterministic, disjoint validat
 caption-rag run
 ```
 
-This creates one BLIP baseline caption and one BLIP caption prompted with top-k CLIP-image-retrieved training captions for each test image. Outputs are `outputs/captions.jsonl`, the saved knowledge image embeddings, and aggregate COCO metrics. Each JSONL record stores the image ID, method, generated caption, raw references, and retrieved IDs/scores. Keep raw evaluation references out of all retrieval indexes and prompts.
+This creates three captions per test image: the BLIP baseline, uncompressed dense RAG, and Contextual Compression RAG. Outputs include `outputs/captions.jsonl`, the saved knowledge image embeddings, aggregate COCO metrics by method, Bonferroni-corrected paired comparisons, and a seeded `hallucination_review.csv` annotation sheet for up to 200 test images. Hallucination fields are intentionally blank for human assessment. Each JSONL record stores the image ID, generated caption, raw references, per-image metrics, and retrieval/compression metadata. Keep raw evaluation references out of all retrieval indexes and prompts.
 
-The initial runner is the minimal main comparison. The protocol still requires tuning, per-image statistical comparisons, hallucination coding, uncertainty analysis, ablations, and qualitative examples before a final report can make claims. Never infer or invent results for unrun experiments.
+The runner includes the removal-of-compression ablation. The protocol still requires tuning, hallucination coding, uncertainty analysis, other applicable ablations, and qualitative examples before a final report can make claims. Never infer or invent results for unrun experiments.
 
 ## Dataset exploration
 
@@ -80,7 +80,7 @@ It produces top object counts, scene-complexity and caption-length histograms, t
 config/default.yaml          Run configuration
 src/caption_rag/data.py       COCO loading and leakage audit
 src/caption_rag/models.py     CLIP and BLIP model wrappers
-src/caption_rag/retrieval.py  Exact cosine dense index
+src/caption_rag/retrieval.py  Exact cosine index and contextual compressor
 src/caption_rag/metrics.py    COCO metrics and paired tests
 src/caption_rag/exploration.py Dataset descriptive statistics
 src/caption_rag/cli.py        prepare/run commands

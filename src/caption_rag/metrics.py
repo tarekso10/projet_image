@@ -13,6 +13,11 @@ def paired_comparison(a: list[float], b: list[float], comparisons: int = 1) -> d
     x, y = np.asarray(a, float), np.asarray(b, float)
     delta = y - x
     shapiro_p = float(stats.shapiro(delta).pvalue)
+    if np.allclose(delta, 0):
+        return {"test": "identical_scores", "shapiro_p": shapiro_p, "p_value": 1.0,
+                "p_bonferroni": 1.0, "alpha_bonferroni": 0.05 / comparisons,
+                "effect_name": "cohen_dz", "effect_size": 0.0, "mean_difference": 0.0,
+                "ci95_low": 0.0, "ci95_high": 0.0}
     if shapiro_p >= 0.05:
         test = stats.ttest_rel(y, x)
         sd = float(np.std(delta, ddof=1))

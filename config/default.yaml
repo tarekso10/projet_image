@@ -1,6 +1,6 @@
 project:
   seed: 2026
-  technique: dense
+  technique: contextual_compression
   output_dir: outputs
 data:
   root: data
@@ -13,12 +13,14 @@ data:
 models:
   image_encoder: openai/clip-vit-base-patch32
   captioner: Salesforce/blip-image-captioning-base
-  text_encoder: sentence-transformers/all-MiniLM-L6-v2
   device: auto
 retrieval:
   top_k: 5
   candidate_pool: 20
   metric: cosine
+compression:
+  max_captions: 4
+  max_words: 60
 generation:
   max_new_tokens: 40
   num_beams: 3

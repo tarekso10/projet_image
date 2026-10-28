@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import random
+import time
 from pathlib import Path
 
 import numpy as np
@@ -14,7 +15,7 @@ import yaml
 from .data import load_coco, validate_splits, write_jsonl
 from .metrics import caption_metrics, caption_metrics_per_image, paired_comparison
 from .models import ModelBundle
-from .retrieval import DenseIndex
+from .retrieval import DenseIndex, compress_captions
 
 
 def _config(path: str) -> dict:
@@ -80,7 +81,7 @@ def run(args: argparse.Namespace) -> None:
     knowledge = _read_jsonl(root / "processed" / "knowledge.jsonl")
     test = _read_jsonl(root / "processed" / "test.jsonl")
     model = ModelBundle(cfg["models"]["image_encoder"], cfg["models"]["captioner"],
-                        cfg["models"]["text_encoder"], cfg["models"]["device"])
+                        cfg["models"]["device"])
     out = Path(cfg["project"]["output_dir"])
     out.mkdir(parents=True, exist_ok=True)
     # Image-to-image retrieval must rank distinct images, not let one image occupy all top-k
@@ -91,34 +92,74 @@ def run(args: argparse.Namespace) -> None:
     index = DenseIndex.build(train_vec, [r["image_id"] for r in knowledge],
                              [" | ".join(r["captions"]) for r in knowledge])
     result_rows = []
+    image_captions = {int(r["image_id"]): r["captions"] for r in knowledge}
     for row, query in zip(test, query_vec):
         baseline = model.caption(row["image_path"], max_new_tokens=cfg["generation"]["max_new_tokens"],
                                  num_beams=cfg["generation"]["num_beams"])
+        retrieve_started = time.perf_counter()
         hits = index.search(query, top_k=cfg["retrieval"]["top_k"], exclude_image_id=row["image_id"])
-        rag = model.caption(row["image_path"], [h["caption"] for h in hits],
-                            max_new_tokens=cfg["generation"]["max_new_tokens"],
-                            num_beams=cfg["generation"]["num_beams"])
+        candidates = [{"image_id": h["image_id"], "caption": caption,
+                       "retrieval_score": h["score"]}
+                      for h in hits for caption in image_captions[h["image_id"]]]
+        retrieval_ms = (time.perf_counter() - retrieve_started) * 1000
+        dense_caption = model.caption(row["image_path"], [c["caption"] for c in candidates],
+                                      max_new_tokens=cfg["generation"]["max_new_tokens"],
+                                      num_beams=cfg["generation"]["num_beams"])
+        compression_started = time.perf_counter()
+        relevance = model.image_text_scores(row["image_path"], [c["caption"] for c in candidates])
+        compressed = compress_captions(
+            candidates, relevance,
+            max_captions=cfg["compression"]["max_captions"],
+            max_words=cfg["compression"]["max_words"])
+        compression_ms = (time.perf_counter() - compression_started) * 1000
+        compressed_caption = model.caption(
+            row["image_path"], [c["caption"] for c in compressed],
+            max_new_tokens=cfg["generation"]["max_new_tokens"],
+            num_beams=cfg["generation"]["num_beams"])
+        common = {"image_id": row["image_id"], "references": row["captions"],
+                  "retrieved_ids": [h["image_id"] for h in hits],
+                  "retrieval_ms": retrieval_ms}
         result_rows.extend([
-            {"image_id": row["image_id"], "method": "baseline", "caption": baseline,
-             "confidence": None, "references": row["captions"], "retrieved_ids": []},
-            {"image_id": row["image_id"], "method": "dense_rag", "caption": rag,
-             "confidence": None, "references": row["captions"],
-             "retrieved_ids": [h["image_id"] for h in hits], "retrieval_scores": [h["score"] for h in hits]},
+            {**common, "method": "baseline", "caption": baseline,
+             "confidence": None, "retrieved_ids": []},
+            {**common, "method": "dense_rag_no_compression", "caption": dense_caption,
+             "confidence": None, "evidence_caption_count": len(candidates),
+             "generation_mode": "uncompressed"},
+            {**common, "method": "contextual_compression_rag", "caption": compressed_caption,
+             "confidence": None, "evidence_caption_count": len(compressed),
+             "evidence_word_count": sum(len(c["caption"].split()) for c in compressed),
+             "compression_ms": compression_ms, "compressed_evidence": compressed,
+             "generation_mode": "clip_image_conditioned_extractive_compression"},
         ])
-    write_jsonl(result_rows, out / "captions.jsonl")
     method_metrics = {}
-    for method in ("baseline", "dense_rag"):
+    methods = ("baseline", "dense_rag_no_compression", "contextual_compression_rag")
+    for method in methods:
         rows = [r for r in result_rows if r["method"] == method]
         scores = caption_metrics([r["caption"] for r in rows], [r["references"] for r in rows])
-        method_metrics[method] = caption_metrics_per_image([r["caption"] for r in rows],
-                                                            [r["references"] for r in rows])
+        per_image = caption_metrics_per_image([r["caption"] for r in rows],
+                                              [r["references"] for r in rows])
+        method_metrics[method] = per_image
+        for row_index, row in enumerate(rows):
+            row["metrics"] = {metric: values[row_index] for metric, values in per_image.items()}
         (out / f"metrics_{method}.json").write_text(json.dumps(scores, indent=2), encoding="utf-8")
     inferential_metrics = ["bleu_4", "meteor", "rouge", "cider", "spice"]
-    comparisons = {metric: paired_comparison(method_metrics["baseline"][metric],
-                                              method_metrics["dense_rag"][metric],
-                                              comparisons=len(inferential_metrics))
-                   for metric in inferential_metrics}
+    import itertools
+    pairs = list(itertools.combinations(methods, 2))
+    comparisons = {f"{left}_vs_{right}/{metric}": paired_comparison(
+                       method_metrics[left][metric], method_metrics[right][metric],
+                       comparisons=len(pairs) * len(inferential_metrics))
+                   for left, right in pairs for metric in inferential_metrics}
     (out / "paired_statistics.json").write_text(json.dumps(comparisons, indent=2), encoding="utf-8")
+    write_jsonl(result_rows, out / "captions.jsonl")
+    review_ids = sorted({int(row["image_id"]) for row in result_rows})
+    random.Random(cfg["project"]["seed"]).shuffle(review_ids)
+    review_ids = set(review_ids[:cfg["evaluation"]["hallucination_sample_size"]])
+    review = [{"image_id": row["image_id"], "method": row["method"],
+               "caption": row["caption"], "object_hallucination": "",
+               "attribute_hallucination": "", "relation_hallucination": "",
+               "annotator": "", "notes": ""}
+              for row in result_rows if int(row["image_id"]) in review_ids]
+    pd.DataFrame(review).to_csv(out / "hallucination_review.csv", index=False)
     print(f"Wrote {len(result_rows)} caption rows and aggregate metrics to {out}")
 
 
@@ -133,7 +174,7 @@ def main() -> None:
     p.add_argument("--val-images", required=True)
     p.add_argument("--train-count", type=int)
     p.set_defaults(func=prepare)
-    r = sub.add_parser("run", help="run BLIP baseline and dense image-to-image RAG")
+    r = sub.add_parser("run", help="run BLIP baseline, dense RAG, and contextual-compression RAG")
     r.add_argument("--config", default="config/default.yaml")
     r.add_argument("--batch-size", type=int, default=16)
     r.set_defaults(func=run)

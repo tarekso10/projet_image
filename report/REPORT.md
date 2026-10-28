@@ -1,15 +1,16 @@
-# A Comparative Study of Dense Retrieval-Augmented Generation for Image Captioning
+# Contextual Compression RAG for Image Captioning: A Comparative Study
 
 **Group:** [fill in] · **Members:** [fill in] · **Date:** [fill in]  
+**Assigned technique:** Contextual Compression RAG (G16–G18)  
 **Status:** Methods draft. Results are pending execution on the shared course split.
 
 ## Abstract
 
-We compare a BLIP image-captioning baseline with a dense retrieval-augmented variant on a shared subset of MS COCO. The RAG system retrieves captions paired with visually similar training images using CLIP image embeddings and supplies those captions as generation context. We evaluate caption quality, retrieval performance, hallucinations, uncertainty, and computational cost. **Insert measured results only after running the frozen experiment.**
+We compare a BLIP image-captioning baseline, uncompressed dense RAG, and Contextual Compression RAG on a shared subset of MS COCO. The systems retrieve captions paired with visually similar training images using CLIP image embeddings. The contextual compressor scores retrieved captions against the query image with CLIP image-text similarity, then removes low-relevance and redundant evidence under a fixed prompt budget. We evaluate caption quality, retrieval performance, hallucinations, uncertainty, and computational cost. **Insert measured results only after running the frozen experiment.**
 
 ## 1. Introduction and problem statement
 
-Image captioning systems can omit visible entities or generate unsupported details. Retrieval-augmented generation may ground a caption in examples from a separate image-caption collection. We ask whether dense image-to-image retrieval improves caption quality and visual grounding over the same captioner without retrieved context, and what retrieval and runtime costs it adds.
+Image captioning systems can omit visible entities or generate unsupported details. Retrieval-augmented generation may ground a caption in examples from a separate image-caption collection. We ask whether image-conditioned compression of retrieved evidence improves caption quality and visual grounding over dense RAG without compression and a captioner without retrieval, and what retrieval and runtime costs it adds.
 
 ## 2. Related work
 
@@ -17,13 +18,13 @@ Discuss image captioning, CLIP-style image-text representation learning, retriev
 
 ## 3. Assigned technique and hypotheses
 
-The implemented method is naive dense RAG. CLIP embeds each knowledge-base image; the test image retrieves the top-k nearest training images by cosine similarity. Their five COCO training captions are candidate evidence. The five references for a test image are evaluation-only and never indexed. BLIP generates both baseline and evidence-conditioned captions using deterministic beam search.
+The assigned method is Contextual Compression RAG. CLIP embeds each knowledge-base image; the test image retrieves the top-k nearest training images by cosine similarity. Their five COCO training captions form candidate evidence. CLIP image-text similarity ranks captions against the test image. The compressor keeps up to four nonredundant captions within a 60-word budget. This is query-conditioned extractive compression: it selects and filters original text but does not paraphrase it. The no-compression ablation supplies all candidate captions to the same BLIP generator. Test references are evaluation-only and never indexed. BLIP generates all three conditions using deterministic beam search.
 
-H1: Dense RAG increases CIDEr relative to BLIP without retrieval. H2: Dense RAG lowers object, attribute, or relation hallucination rates. H3: Any quality gain increases latency and may not be statistically significant.
+H1: Contextual Compression RAG increases CIDEr relative to BLIP without retrieval. H2: Compression improves caption quality or reduces hallucinations relative to uncompressed dense RAG. H3: Any quality gain increases latency and may not be statistically significant.
 
 ## 4. System architecture
 
-COCO test image → CLIP image embedding → cosine nearest-neighbor search over training images → top-k associated training captions → BLIP generation → caption and metrics. The baseline omits retrieval evidence. Exact implementation and prompt are in `src/caption_rag/`.
+COCO test image → CLIP image embedding → cosine nearest-neighbor search over training images → associated training captions → (for compression) CLIP image-text ranking and redundancy/budget filtering → BLIP generation → caption and metrics. The baseline omits retrieval evidence. The uncompressed dense RAG ablation skips the compression step. Exact implementation and prompt are in `src/caption_rag/`.
 
 ## 5. Dataset and preprocessing
 
@@ -38,10 +39,11 @@ Report the exact COCO release, official/shared split source, train/validation/te
 | Knowledge base | 10,000 COCO train2017 images |
 | Test set | [shared count and split ID hash] |
 | Retrieval | cosine, exact dense search, top-k [selected on validation] |
+| Compression | CLIP image-text ranking; max 4 captions / 60 words |
 | Generation | deterministic beam search, 3 beams, maximum 40 new tokens |
 | Hardware/software | [GPU/CPU, RAM, Python, package versions] |
 
-Include baseline versus RAG, tuning on validation only, retrieval Recall@k/Precision@k/MRR/latency, and at least the required ablations applicable to the assigned technique. The current code establishes baseline and RAG generation; add experiment records for tuning/ablations before treating this section as complete.
+Include baseline versus RAG, tuning on validation only, retrieval Recall@k/Precision@k/MRR/latency, and at least the required ablations applicable to the assigned technique. The code runs baseline, uncompressed dense RAG, and contextual-compression RAG; the latter two isolate the compression contribution.
 
 ## 7. Results
 
@@ -50,7 +52,8 @@ Include baseline versus RAG, tuning on validation only, retrieval Recall@k/Preci
 | Method | BLEU-4 | METEOR | ROUGE-L | CIDEr | SPICE | BERTScore |
 |---|---:|---:|---:|---:|---:|---:|
 | BLIP baseline | pending | pending | pending | pending | pending | pending |
-| Dense RAG | pending | pending | pending | pending | pending | pending |
+| Dense RAG, no compression | pending | pending | pending | pending | pending | pending |
+| Contextual Compression RAG | pending | pending | pending | pending | pending | pending |
 
 ### Retrieval, latency, and uncertainty
 

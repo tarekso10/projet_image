@@ -21,7 +21,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-models = ["torch>=2.2", "transformers>=4.45,<6", "sentence-transformers>=3,<6", "faiss-cpu>=1.8"]
+models = ["torch>=2.2", "transformers>=4.45,<6", "faiss-cpu>=1.8"]
 metrics = ["pycocoevalcap>=1.2", "bert-score>=0.3.13"]
 dev = ["pytest>=8,<9", "ruff>=0.6,<1"]
 
