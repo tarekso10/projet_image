@@ -1,0 +1,15 @@
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces Frozen dataset distribution and caption cardinality.\relax }}{7}{table.caption.6}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Knowledge-base vectors and exact FAISS index configurations.\relax }}{8}{table.caption.7}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces Preprocessing comparison on 100 validation images.\relax }}{9}{table.caption.8}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Selected quality-control outcomes recorded by the project.\relax }}{10}{table.caption.10}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Held-out image retrieval smoke test.\relax }}{11}{table.caption.11}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {5.1}{\ignorespaces Planned ablation matrix; no metric values are available.\relax }}{16}{table.caption.18}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {B.1}{\ignorespaces Generation evaluation results: pending.\relax }}{20}{table.caption.19}%

@@ -1,0 +1,37 @@
+\chapter{System Architecture, Dataset, and Knowledge Base}\label{ch:architecture}
+The implemented pipeline begins with COCO source images and annotations. Frozen IDs determine split membership. Preprocessing creates normalized-shape JPEG inputs; metadata and caption files preserve source identifiers. Image and training-caption encoders emit 512-dimensional vectors with mappings back to COCO IDs. The train subset alone populates both FAISS indexes. Held-out validation and test image vectors are queried against the image index. \Cref{fig:architecture} summarizes the data flow and marks the unimplemented generation stage.
+
+\begin{figure}[htbp]\centering
+\fbox{\begin{minipage}{0.92\textwidth}\centering
+COCO images + instance/caption annotations\\[2mm]$\downarrow$ frozen IDs (seed 20261106)\\
+Train 10,000 \hspace{8mm} Validation 100 \hspace{8mm} Test 1,000\\[2mm]$\downarrow$ decode, EXIF transpose, RGB, 224$\times$224 letterbox\\
+Per-image metadata + five reference captions per image\\[2mm]$\downarrow$ CLIP ViT-B/32 encoders (512-D; L2 normalized)\\
+Train image vectors (10,000) $\rightarrow$ FAISS image index\\
+Train caption vectors (50,000) $\rightarrow$ FAISS caption index\\[2mm]
+Held-out image query $\rightarrow$ top-$k$ train neighbors (smoke-tested)\\[2mm]
+\fbox{Generator, RAG prompting, caption metrics: NOT IMPLEMENTED}
+\end{minipage}}\caption{Implemented Phase 1 architecture. Only the held-out image retrieval path is evaluated; the caption-generation path remains pending.}\label{fig:architecture}\end{figure}
+
+The image index excludes validation and test images. The caption index contains training captions only, and the source code checks that held-out caption IDs are absent. The image evaluator queries validation and test vectors, chooses deterministic evenly spaced queries, and filters any same-ID result if present. These controls reduce direct self-retrieval and split leakage, although an image-level retrieval smoke test is not a complete leakage audit for future prompt construction or generator training.
+
+\section{Dataset and Knowledge Base}\label{ch:data}
+\section{Source and split construction}
+The dataset is drawn from MS COCO 2017 train and validation sources \cite{lin2014coco}. A rarity-first multilabel selection procedure uses seed 20261106. The frozen manifests are stored as JSON and CSV under \texttt{data/selected/}. Train IDs come from train2017; validation and test are separate selections from val2017. A controlled one-for-one revision replaced four test IDs after a historical cross-split near-duplicate review; train and validation manifests remained unchanged. Backups and revision records are retained. The final selected split sizes and caption counts are in \cref{tab:dataset}.
+
+\begin{table}[htbp]\centering\caption{Frozen dataset distribution and caption cardinality.}\label{tab:dataset}
+\begin{tabular}{lrrr}\toprule Split & Images & Captions & Captions/image\\\midrule Train & 10,000 & 50,000 & 5\\Validation & 100 & 500 & 5\\Test & 1,000 & 5,000 & 5\\\midrule Total & 11,100 & 55,500 & 5\\\bottomrule\end{tabular}\end{table}
+
+COCO's full annotation source contains 118,287 train2017 images, 860,001 object instances, and 591,753 captions; val2017 contains 5,000 images, 36,781 instances, and 25,014 captions. The selected subset enforces exactly five caption references per image. In source pools, some images have six or seven captions, so eligibility filtering is required. The audit notes 315 train and 13 validation candidates with non-five caption cardinality as exclusions during selection.
+
+\section{Integrity and duplicate checks}
+Quality control verifies the expected split counts, five captions per selected image, successful decoding of all 11,100 processed files, absence of overlap across split manifests, and embedding row order against the manifests. Exact SHA-256 checking finds zero duplicate groups. A 64-bit DCT perceptual hash with inclusive Hamming threshold six finds nine review candidates, all within train; there are zero current cross-split candidates. Hash proximity is a review signal, not proof of duplicate identity. A historical train/test near-duplicate pair was resolved by controlled test replacement; archived audits are kept for traceability.
+
+\section{Metadata and knowledge base}
+The current compact split JSON stores one image record keyed by COCO image ID, including filename, split, original dimensions, object labels, and bounding boxes in COCO $[x,y,w,h]$ pixel format. Supporting fields preserve annotation-derived counts and complexity, geometric summaries, pixel-derived color/edge summaries, CLIP prompt predictions, caption references, and provenance. These sources are explicitly distinguished: object names and boxes are COCO annotations; box relations are geometric calculations; scene/context outputs are model predictions; color and edge measures are pixel statistics. The metadata schema describes these fields and limitations. The report does not treat CLIP labels or inferred geometry as ground truth.
+
+\begin{table}[htbp]\centering\caption{Knowledge-base vectors and exact FAISS index configurations.}\label{tab:index}
+\begin{tabularx}{\textwidth}{lXXXX}\toprule Index & Stored items & Dimension / type & Metric & Split restriction\\\midrule Image & 10,000 & 512, float32 & Inner product = cosine & Train images only\\Caption & 50,000 & 512, float32 & Inner product = cosine & Train captions only\\\bottomrule\end{tabularx}\end{table}
+
+The CLIP model is \texttt{openai/clip-vit-base-patch32}; its recorded model revision is:
+\begin{center}\small\texttt{3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268}\end{center}
+Image vectors are saved per split as NumPy arrays with metadata mappings; caption vectors cover only raw training captions and retain caption IDs, image IDs, and source text in their mapping. Arrays are float32 and L2-normalized. FAISS uses exact \texttt{IndexFlatIP}; index files and metadata are stored in \texttt{vector\_database/}. The indexes are implemented with FAISS, a library for dense-vector search and clustering \cite{douze2024faiss}. Their sizes, dimensions, and split restrictions are summarized in \cref{tab:index}; the recorded files occupy 20,480,045 bytes (image) and 102,400,045 bytes (caption). Exact search provides a transparent reference implementation, though it scales linearly with gallery size.

@@ -1,0 +1,10 @@
+{
+  "stage": "text_embeddings",
+  "status": "PASS",
+  "result": {
+    "status": "cached",
+    "count": 50000,
+    "dimension": 512,
+    "model": "openai/clip-vit-base-patch32"
+  }
+}

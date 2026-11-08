@@ -1,0 +1,32 @@
+{
+  "revision": "1.1.0",
+  "all_preserved": true,
+  "verification": "Pre-replacement SHA-256 and pHash result artifacts are archived byte-for-byte. Current revision has freshly recomputed pHash results and selected-image SHA-256 audit.",
+  "files": [
+    {
+      "path": "reports/perceptual_hash/duplicate_candidates.json",
+      "archived_sha256": "8ef9bfb0fcf4fd5ca834a16c52d749b540fa6b26a5b44d16f2e35094926d53d1",
+      "backup_sha256": "8ef9bfb0fcf4fd5ca834a16c52d749b540fa6b26a5b44d16f2e35094926d53d1"
+    },
+    {
+      "path": "reports/perceptual_hash/hash_statistics.json",
+      "archived_sha256": "c94489cd4bf679d17dbcb4bffa49e1ea83a318919ed82ef8d4057bf6711eacee",
+      "backup_sha256": "c94489cd4bf679d17dbcb4bffa49e1ea83a318919ed82ef8d4057bf6711eacee"
+    },
+    {
+      "path": "reports/perceptual_hash/phash_database.npz",
+      "archived_sha256": "df5a2865e3c2b717ee21c39f5171cd0c08b29eb2ba1679854e6284e58c33b2d6",
+      "backup_sha256": "df5a2865e3c2b717ee21c39f5171cd0c08b29eb2ba1679854e6284e58c33b2d6"
+    },
+    {
+      "path": "reports/dataset_audit/selected_images_integrity.json",
+      "archived_sha256": "e2e8bbf8fc75a670a2287871cfe6f53bfe5f173be389a14f8d19fd737bc20467",
+      "backup_sha256": "e2e8bbf8fc75a670a2287871cfe6f53bfe5f173be389a14f8d19fd737bc20467"
+    }
+  ],
+  "current_revision_artifacts": {
+    "phash_statistics_sha256": "4e2be4932f972e4d4f86b7313de27fc7341ec1a2b74c5ab888a8696e69504284",
+    "phash_database_sha256": "71837b9dda132eaac231e9a407417981baececadbbda18e78e8f0ffeddadac73",
+    "selected_integrity_sha256": "ad71a88360b637ba8bd5856e7b005b88f96cc00feac359f2c1eb63a1243a9ab5"
+  }
+}

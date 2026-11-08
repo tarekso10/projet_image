@@ -1,0 +1,15 @@
+{
+  "stage": "embeddings",
+  "status": "PASS",
+  "result": {
+    "status": "cached",
+    "model": "openai/clip-vit-base-patch32",
+    "dimension": 512,
+    "counts": {
+      "train": 10000,
+      "validation": 100,
+      "test": 1000
+    },
+    "output_dir": "embeddings\\image_embeddings"
+  }
+}

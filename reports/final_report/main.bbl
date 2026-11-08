@@ -1,0 +1,91 @@
+\begin{thebibliography}{10}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Anderson et~al.(2016)Anderson, Fernando, Johnson, and
+  Gould]{anderson2016spice}
+Peter Anderson, Basura Fernando, Mark Johnson, and Stephen Gould.
+\newblock Spice: Semantic propositional image caption evaluation.
+\newblock In \emph{European Conference on Computer Vision}, pages 382--398,
+  2016.
+\newblock \doi{10.1007/978-3-319-46454-1_24}.
+
+\bibitem[Banerjee and Lavie(2005)]{banerjee2005meteor}
+Satanjeev Banerjee and Alon Lavie.
+\newblock Meteor: An automatic metric for mt evaluation with improved
+  correlation with human judgments.
+\newblock In \emph{Proceedings of the ACL Workshop on Intrinsic and Extrinsic
+  Evaluation Measures for Machine Translation and/or Summarization}, pages
+  65--72, 2005.
+
+\bibitem[Douze et~al.(2024)Douze, Guzhva, Deng, Johnson, Szilvasy, Mazar{\'e},
+  Lomeli, Hosseini, and J{\'e}gou]{douze2024faiss}
+Matthijs Douze, Alexandr Guzhva, Chengqi Deng, Jeff Johnson, Gergely Szilvasy,
+  Pierre-Emmanuel Mazar{\'e}, Maria Lomeli, Lucas Hosseini, and Herv{\'e}
+  J{\'e}gou.
+\newblock The faiss library.
+\newblock \emph{arXiv preprint arXiv:2401.08281}, 2024.
+\newblock URL \url{https://arxiv.org/abs/2401.08281}.
+
+\bibitem[Lewis et~al.(2020)Lewis, Perez, Piktus, Petroni, Karpukhin, Goyal,
+  K{\"u}ttler, Lewis, Yih, Rockt{\"a}schel, Riedel, and Kiela]{lewis2020rag}
+Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir
+  Karpukhin, Naman Goyal, Heinrich K{\"u}ttler, Mike Lewis, Wen-tau Yih, Tim
+  Rockt{\"a}schel, Sebastian Riedel, and Douwe Kiela.
+\newblock Retrieval-augmented generation for knowledge-intensive nlp tasks.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~33, pages 9459--9474, 2020.
+\newblock URL \url{https://arxiv.org/abs/2005.11401}.
+
+\bibitem[Lin(2004)]{lin2004rouge}
+Chin-Yew Lin.
+\newblock Rouge: A package for automatic evaluation of summaries.
+\newblock In \emph{Text Summarization Branches Out}, pages 74--81, 2004.
+
+\bibitem[Lin et~al.(2014)Lin, Maire, Belongie, Hays, Perona, Ramanan,
+  Doll{\'a}r, and Zitnick]{lin2014coco}
+Tsung-Yi Lin, Michael Maire, Serge Belongie, James Hays, Pietro Perona, Deva
+  Ramanan, Piotr Doll{\'a}r, and C.~Lawrence Zitnick.
+\newblock Microsoft coco: Common objects in context.
+\newblock In \emph{European Conference on Computer Vision}, pages 740--755.
+  Springer, 2014.
+\newblock \doi{10.1007/978-3-319-10602-1_48}.
+
+\bibitem[Papineni et~al.(2002)Papineni, Roukos, Ward, and
+  Zhu]{papineni2002bleu}
+Kishore Papineni, Salim Roukos, Todd Ward, and Wei-Jing Zhu.
+\newblock Bleu: a method for automatic evaluation of machine translation.
+\newblock In \emph{Proceedings of the 40th Annual Meeting of the Association
+  for Computational Linguistics}, pages 311--318, 2002.
+\newblock \doi{10.3115/1073083.1073135}.
+
+\bibitem[Radford et~al.(2021)Radford, Kim, Hallacy, Ramesh, Goh, Agarwal,
+  Sastry, Askell, Mishkin, Clark, Krueger, and Sutskever]{radford2021clip}
+Alec Radford, Jong~Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh,
+  Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark,
+  Gretchen Krueger, and Ilya Sutskever.
+\newblock Learning transferable visual models from natural language
+  supervision.
+\newblock In \emph{Proceedings of the 38th International Conference on Machine
+  Learning}, volume 139 of \emph{Proceedings of Machine Learning Research},
+  pages 8748--8763, 2021.
+\newblock URL \url{https://proceedings.mlr.press/v139/radford21a.html}.
+
+\bibitem[Vedantam et~al.(2015)Vedantam, Zitnick, and Parikh]{vedantam2015cider}
+Ramakrishna Vedantam, C.~Lawrence Zitnick, and Devi Parikh.
+\newblock Cider: Consensus-based image description evaluation.
+\newblock In \emph{Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition}, pages 4566--4575, 2015.
+\newblock \doi{10.1109/CVPR.2015.7299087}.
+
+\bibitem[Zhang et~al.(2020)Zhang, Kishore, Wu, Weinberger, and
+  Artzi]{zhang2020bertscore}
+Tianyi Zhang, Varsha Kishore, Felix Wu, Kilian~Q. Weinberger, and Yoav Artzi.
+\newblock Bertscore: Evaluating text generation with bert.
+\newblock In \emph{International Conference on Learning Representations}, 2020.
+\newblock URL \url{https://openreview.net/forum?id=SkeHuCVFDr}.
+
+\end{thebibliography}
