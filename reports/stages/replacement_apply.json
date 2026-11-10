@@ -1,5 +1,0 @@
-{
-  "stage": "replacement_apply",
-  "status": "FAIL",
-  "error": "Frozen manifests changed after candidate screening; refusing to apply stale replacement plan"
-}
