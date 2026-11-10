@@ -1,31 +1,35 @@
-\contentsline {chapter}{Abstract}{1}{chapter*.4}%
-\contentsline {chapter}{\numberline {1}Introduction and Problem Statement}{2}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Problem Statement}{2}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Research questions and scope}{3}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Test-size discrepancy}{3}{section.1.3}%
-\contentsline {chapter}{\numberline {2}Background and Assigned Technique}{4}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Retrieval-augmented generation}{4}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Image captioning and evaluation}{4}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Vision-language representations}{5}{section.2.3}%
-\contentsline {section}{\numberline {2.4}Assigned Technique and Implemented Method}{5}{section.2.4}%
-\contentsline {chapter}{\numberline {3}System Architecture, Dataset, and Knowledge Base}{6}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Dataset and Knowledge Base}{7}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Source and split construction}{7}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Integrity and duplicate checks}{7}{section.3.3}%
-\contentsline {section}{\numberline {3.4}Metadata and knowledge base}{8}{section.3.4}%
-\contentsline {chapter}{\numberline {4}Experimental Protocol and Results}{9}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Quantitative Results}{10}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Dataset Exploration}{11}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Object categories and scene complexity}{11}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Captions and vocabulary}{11}{section.4.4}%
-\contentsline {section}{\numberline {4.5}Bounding-box geometry}{11}{section.4.5}%
-\contentsline {section}{\numberline {4.6}Pixel-level visual analysis}{14}{section.4.6}%
-\contentsline {chapter}{\numberline {5}Pending Generation Experiments}{15}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Ablation Analysis}{15}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Hallucination Analysis}{15}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Qualitative Analysis}{16}{section.5.3}%
-\contentsline {chapter}{\numberline {6}Discussion and Conclusions}{17}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Limitations}{17}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Conclusion and Next Steps}{18}{section.6.2}%
-\contentsline {chapter}{\numberline {A}Reproducibility and Artifact Map}{19}{appendix.A}%
-\contentsline {chapter}{\numberline {B}Pending Results Template}{20}{appendix.B}%
+\babel@toc {english}{}\relax 
+\contentsline {section}{Abstract}{i}{Doc-Start}%
+\contentsline {section}{\numberline {1}Introduction and Project Objectives}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Objective}{1}{subsection.1.1}%
+\contentsline {section}{\numberline {2}Dataset Description and Splitting}{1}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Source and selected splits}{1}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}References and leakage controls}{2}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Test-size note}{2}{subsection.2.3}%
+\contentsline {section}{\numberline {3}Data Exploration and Statistical Analysis}{2}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Object categories and scene complexity}{2}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Caption lengths and vocabulary}{3}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Part-of-speech analysis}{4}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Color and image-level visual diversity}{5}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Scene and spatial summaries}{6}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Image and Caption Preprocessing}{6}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Image pipeline}{6}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Resize choice}{6}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Caption handling}{7}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Metadata Extraction}{7}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Fields and provenance}{7}{subsection.5.1}%
+\contentsline {section}{\numberline {6}Image and Text Embeddings}{8}{section.6}%
+\contentsline {section}{\numberline {7}Knowledge Base and FAISS Indexing}{8}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Training-only memory}{8}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Exact search}{8}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Pipeline overview}{8}{subsection.7.3}%
+\contentsline {section}{\numberline {8}Retrieval and Quality Control}{8}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Retrieval smoke test}{9}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Quality-control results}{9}{subsection.8.2}%
+\contentsline {section}{\numberline {9}Results and Discussion}{10}{section.9}%
+\contentsline {subsection}{\numberline {9.1}What the evidence shows}{10}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}What it does not show}{10}{subsection.9.2}%
+\contentsline {section}{\numberline {10}Limitations and Conclusion}{11}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Limitations and compliance}{11}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}Conclusion and future work}{11}{subsection.10.2}%
+\contentsline {section}{\numberline {A}Reproducibility Summary}{12}{appendix.A}%

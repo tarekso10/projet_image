@@ -1,9 +1,0 @@
-{
-  "model": "openai/clip-vit-base-patch32",
-  "count": 11100,
-  "image_vector_source": "cached normalized CLIP image embeddings",
-  "confidence_threshold": 0.55,
-  "scene_confidence_threshold": 0.35,
-  "prompt_logit_scale": 100.00000762939453,
-  "semantics": "zero-shot predictions are not ground truth"
-}
