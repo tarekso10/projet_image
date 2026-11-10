@@ -1,3 +1,6 @@
+% Compatibility entry point; active section source: concepts.tex.
+\input{sections/concepts}
+\endinput
 \chapter{Background and Assigned Technique}\label{ch:sota}
 \section{Retrieval-augmented generation}
 RAG combines a retriever over non-parametric memory with a generator that conditions on retrieved material. In the original formulation, dense retrieval selects passages and a sequence-to-sequence model conditions on them for knowledge-intensive NLP tasks \cite{lewis2020rag}. Subsequent work has explored retrieval over examples, documents, demonstrations, and multimodal content. For image captioning, retrieved items may be similar images, their captions, structured annotations, or combinations of these. These choices are not interchangeable: image-neighbor retrieval can provide visual analogies, while caption retrieval can offer lexical templates but may also transfer incorrect objects or relations.

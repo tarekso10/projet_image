@@ -1,0 +1,10 @@
+\chapter{Conclusion and Future Work}
+\label{ch:conclusion}
+
+Phase 1 prepared and checked a COCO subset with 10,000 training images, 100 validation images, and 1,000 test images. It produced five reference-caption records per image, image and caption metadata, descriptive analyses, 512-dimensional CLIP vectors, and separate FAISS indexes containing training items only. The saved retrieval smoke test returned neighbors for all 20 sampled held-out queries and reported zero self-matches. These are infrastructure and data-preparation results, not evidence of improved captioning.
+
+The next phase should confirm the assigned technique, then implement a non-retrieval baseline and clearly defined image-, caption-, and/or hybrid-retrieval methods using the same generator and held-out examples. Each method should preserve the anti-leakage rules. Generated captions can then be evaluated with complementary text metrics and a visual-grounding or human review protocol. Paired statistical comparisons, hallucination analysis, and ablations should be reported only after those outputs have been collected.
+
+\begin{scopebox}
+\textbf{Status at the end of this report:} Caption generation, comparative RAG evaluation, caption-quality scoring, hallucination analysis, significance testing, and generation ablations remain Phase 2 work. No results for these tasks are claimed.
+\end{scopebox}

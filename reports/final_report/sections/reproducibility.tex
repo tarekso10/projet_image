@@ -1,0 +1,26 @@
+\chapter{Reproducibility}
+\label{ch:reproducibility}
+
+\section{Configuration and frozen inputs}
+The main configuration is \code{configs/config.json}. It records seed 20261106, image size 224, black letterbox padding, JPEG output, model identifiers, embedding normalization, batch size, split sizes, retrieval index type, gallery, top-\(k\), and query count. Frozen image IDs are stored in the split manifests. The revision history and backups document the controlled replacement of four test IDs; train and validation IDs remained unchanged.
+
+\section{Recorded software and model details}
+The saved caption-embedding metadata records the model revision, CPU execution, PyTorch 2.15.0+cpu, Transformers 5.22.1, batch size 64, and elapsed extraction time. The saved POS summary records spaCy 3.8.18 and model \code{en\_core\_web\_sm}. FAISS metadata records version 1.15.1. The repository's \code{requirements.txt} specifies lower bounds or ranges for the Python dependencies rather than a complete lockfile.
+
+The README recommends Python 3.10 or later, but the reports do not provide a complete, unified environment snapshot tied to every saved artifact. The exact Python version used for all pipeline runs, the complete resolved dependency set, and a single end-to-end execution record are therefore not claimed here.
+
+\section{Reproduction commands}
+From the repository root, the main entry point lists the available stages with:
+\begin{lstlisting}[basicstyle=\ttfamily\small,frame=single,backgroundcolor=\color{ProjectGrey}]
+python main.py --help
+\end{lstlisting}
+
+The saved analyses can be run with commands such as:
+\begin{lstlisting}[basicstyle=\ttfamily\small,frame=single,backgroundcolor=\color{ProjectGrey}]
+python main.py extended_analysis
+python main.py pos
+python main.py visual
+python main.py quality
+\end{lstlisting}
+
+Model-dependent stages require the configured model files and Python packages. The README warns that some stages may be computationally expensive and that selection/preprocessing commands are not intended to be rerun on this frozen checkout. This report itself is compiled from \code{reports/final\_report/}; its compilation instructions are given in that directory's README.

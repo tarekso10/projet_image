@@ -1,3 +1,6 @@
+% Compatibility entry point; active chapter source: chapter3_exploration.tex.
+\input{sections/chapter3_exploration}
+\endinput
 \chapter{Experimental Protocol and Results}\label{ch:protocol}
 The completed protocol is pipeline-oriented. Configuration records seed, input size, padding color, model names, normalization, split sizes, retrieval gallery, top-$k$, and query count. The image preprocessing comparison evaluates letterbox, stretch, and center crop on the existing 100 validation images using geometric criteria only. Letterboxing preserves the entire image and aspect ratio, at the cost of padding. Mean content fraction is 0.7224 and padding fraction 0.2776; stretch has mean absolute log aspect distortion 0.3309; center crop discards a mean 0.2776 of image area. This is a new geometry-based comparison, not a historical model-performance experiment.
 

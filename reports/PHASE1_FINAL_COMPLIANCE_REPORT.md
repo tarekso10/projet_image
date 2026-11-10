@@ -1,8 +1,8 @@
 # Phase 1 Final Compliance Audit
 
-## Audit scope and source limitation
+## Audit scope and assignment requirements
 
-This audit uses the provided task specification, project source, frozen manifests, generated artifacts, and `reports/final_quality_control.json`. The assignment PDF itself was not found in the project or the searched Desktop/Documents locations. Therefore, exact requirement wording and page/section references in the PDF cannot be independently verified. The test-size contradiction is documented in the supplied specification as Section 4.1 (100 test images) versus Sections 4.4.2 and 4.4.3 (1,000 test images); the existing 1,000-image test set is preserved pending instructor clarification.
+This audit uses the original assignment PDF, project source, frozen manifests, generated artifacts, and `reports/final_quality_control.json`. The detailed dataset and preprocessing requirements specify 1,000 test images. One occurrence contains the typographical value `1,00`; the detailed requirements and data-audit instructions establish 1,000 as intended. The existing 1,000-image test set matches that requirement and remains unchanged.
 
 ## Project and dataset
 
@@ -35,7 +35,7 @@ COCO instance annotations provide category labels, bounding boxes, area, crowd f
 
 COCO instances do not provide semantic relation labels. The new analysis derives geometric relations from boxes in 11,100 selected images: centroid ordering for left/right and above/below, strict containment, IoU >= 0.10 for overlap, and normalized center distance <= 0.10 for near. Pair-level CSV, per-image JSON, summary JSON and a frequency chart are saved. These are geometric inferences, not semantic annotations; they do not establish actions, contact, support, or function.
 
-Visual analysis covers CLIP zero-shot scene/context/day-night prompts with confidence scores and abstention, plus the new color/shape diversity analysis across 11,100 images. Coarse HSV family shares, dominant family, luminance and saturation moments, and global edge-density proxy are reported in JSON/CSV and visualizations. The edge proxy is not object segmentation or semantic shape classification; colors are pixel-level and letterbox pixels affect non-square images.
+Visual analysis covers CLIP zero-shot scene/context/day-night prompts with confidence scores and abstention, plus pixel-level color, luminance, saturation, and edge-density analysis across 11,100 images. Coarse HSV family shares, dominant family, luminance and saturation moments, and global edge-density proxy are reported in JSON/CSV and visualizations. No independent, validated shape-recognition analysis is available. The edge proxy is not shape recognition, object segmentation, or semantic shape classification; colors are pixel-level and letterbox pixels affect non-square images.
 
 ## Embeddings and vector indexes
 
@@ -65,7 +65,7 @@ Configuration is in `configs/config.json`; seed is 20261106. Historical selectio
 | Object category/count/co-occurrence analysis | PASS | Statistical analysis CSVs and visualizations |
 | Spatial relations | PASS | COCO-box-derived geometric relations in JSON/CSV and frequency chart; explicitly disclaimed as semantic labels |
 | Visual scene/context/time analysis | PASS | 11,100 CLIP predictions; uncertainty and summary reports |
-| Color and shape diversity | PASS | Per-image coarse color/luminance/saturation and edge proxy JSON/CSV plus visualizations; limitations documented |
+| Color and image-level visual proxies | PASS | Per-image coarse color/luminance/saturation and edge-density proxy JSON/CSV plus visualizations; no shape-recognition analysis claimed |
 | Metadata extraction | PASS | Categories, boxes, counts, complexity, dimensions in `data/metadata/` |
 | Image embeddings | PASS | QC shape, finite/unit norm, manifest-order checks |
 | Caption embeddings | PASS | 50,000 raw train captions; mapping and vector checks |
@@ -73,10 +73,11 @@ Configuration is in `configs/config.json`; seed is 20261106. Historical selectio
 | Retrieval anti-leakage | PASS | 20 held-out queries; zero self matches |
 | Validation-based preprocessing selection | PASS (new geometry-only comparison) | Three configurations evaluated on existing 100 validation images; criteria, results, selection and performance limitation recorded; no historical experiment claimed |
 | Reproducibility record | PARTIAL | Seed/model revisions and key versions recorded; unified environment/run record missing |
-| PDF-level requirement mapping | NOT_VERIFIABLE | Original assignment PDF unavailable for this audit |
+| Assignment PDF requirement mapping | PASS | Original PDF reviewed; detailed requirements specify 1,000 test images, with one isolated `1,00` typo |
+| Test-size requirement | PASS | Frozen test split contains 1,000 images, consistent with the detailed assignment requirements |
 
 ## Remaining limitations and conclusion
 
-The machine-readable QC report remains PASS for its pipeline checks, but that status is not equivalent to full assignment compliance. The four requested priority areas now have evidence-backed analyses. Remaining limitations include the unavailable original PDF, incomplete environment snapshot, unrecorded historical EXIF/conversion counts, and unresolved assignment test-size contradiction. The validation comparison is geometry-only; color/shape and relation outputs retain their stated inference limits. Phase 1 compliance remains **PARTIAL**. The current 1,000-image test set and all frozen manifests remain intact.
+The machine-readable QC report remains PASS for its pipeline checks, but that status is not equivalent to full assignment compliance. The four requested priority areas now have evidence-backed analyses. Remaining limitations include the incomplete environment snapshot, unrecorded historical EXIF/RGB-conversion counts, and partial exact source-to-caption mapping verification. The validation comparison is geometry-only; color, edge-density, and relation outputs retain their stated inference limits. Phase 1 compliance remains **PARTIAL**. The current 1,000-image test set and all frozen manifests remain intact.
 
 The focused `python main.py extended_analysis` stage was run to regenerate only its reports, metadata and visualizations. It read raw images and captions plus existing annotation metadata; it did not change source images/captions, frozen manifests, embeddings or FAISS indexes. The existing QC report was inspected and remains PASS; model and index stages were not rerun.

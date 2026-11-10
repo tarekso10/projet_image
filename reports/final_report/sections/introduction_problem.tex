@@ -1,3 +1,6 @@
+% Compatibility entry point; active chapter source: chapter1_introduction.tex.
+\input{sections/chapter1_introduction}
+\endinput
 \chapter{Introduction and Problem Statement}\label{ch:intro}
 Image captioning maps a visual scene to a concise natural-language description. A useful caption must identify salient entities, their attributes, and relevant relations while avoiding details unsupported by the image. Modern vision-language encoders provide transferable representations, but caption generation remains sensitive to data coverage, retrieval quality, decoder behavior, and evaluation design. Retrieval-augmented generation (RAG) introduces external examples or knowledge at inference time, potentially giving a generator access to information beyond its parametric weights \cite{lewis2020rag}.
 
@@ -13,5 +16,5 @@ The current operational problem is therefore narrower: can the project assemble 
 \section{Research questions and scope}
 The completed phase addresses data integrity and pipeline feasibility. It does not answer which RAG method performs best, whether RAG reduces hallucinations, or whether improvements are statistically significant. Those are Phase 2 questions. The available retrieval smoke test reports embedding similarity, not reference-caption agreement or factual correctness.
 
-\section{Test-size discrepancy}
-The user-provided project specification states that one assignment section requests 100 test images while other sections request 1,000. It also says the current configuration is 10,000 train, 100 validation, and 1,000 test. The repository audit could not locate the original assignment PDF; the section references and conflict are therefore taken from the supplied specification and cannot be independently checked against the PDF. The current frozen 1,000-image test split is retained. The instructor should resolve the conflict before any manifest is revised. All results in this report use the present 1,000-image test split.
+\section{Test-size requirement}
+The original assignment's detailed dataset and preprocessing requirements specify 1,000 test images. One occurrence contains the typographical value \code{1,00}; the detailed requirements and data-audit instructions establish 1,000 as intended. The frozen split contains 1,000 test images and is unchanged.

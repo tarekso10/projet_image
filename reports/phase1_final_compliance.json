@@ -3,7 +3,8 @@
   "overall_status": "PARTIAL",
   "audit_basis": {
     "project_root": "C:/Users/uu/Desktop/projet image",
-    "primary_assignment_pdf_found": false,
+    "assignment_pdf_reviewed": true,
+    "assignment_pdf_review_source": "Original assignment PDF reviewed; detailed requirements and data-audit instructions specify 1,000 test images.",
     "provided_task_specification_used": true,
     "existing_quality_control_status": "PASS",
     "existing_quality_control_regenerated": false,
@@ -44,8 +45,8 @@
     "anti_leakage": "PASS",
     "validation_configuration": "PASS_NEW_GEOMETRY_ONLY_COMPARISON",
     "reproducibility": "PARTIAL",
-    "assignment_pdf_comparison": "NOT_VERIFIABLE",
-    "test_size_requirement": "NOT_VERIFIABLE"
+    "assignment_pdf_comparison": "PASS",
+    "test_size_requirement": "PASS"
   },
   "verified_results": {
     "quality_control": {
@@ -155,17 +156,17 @@
       }
     }
   },
-  "test_size_contradiction": {
-    "section_4_1_images": 100,
-    "sections_4_4_2_and_4_4_3_images": 1000,
+  "test_size_note": {
+    "detailed_requirement_images": 1000,
+    "isolated_typographical_value": "1,00",
     "current_images": 1000,
     "changed": false,
-    "recommendation": "Confirm required test size with the professor before changing the frozen dataset.",
-    "source_note": "Section references and discrepancy were provided in the task text; original PDF unavailable for direct verification."
+    "interpretation": "The original assignment's detailed dataset and preprocessing requirements specify 1,000 test images. One occurrence contains the typographical value 1,00; the detailed requirements and data-audit instructions establish 1,000 as intended.",
+    "source_note": "Original assignment PDF reviewed."
   },
   "missing_requirements": [
-    "Original assignment PDF unavailable for exact wording and page mapping.",
     "Historical per-image EXIF correction and grayscale/RGBA conversion counts were not retained.",
+    "Exact source-to-caption-ID/text mapping verification remains partial.",
     "Unified reproducibility snapshot (OS, complete dependency versions, timestamp and manifest revision) remains incomplete."
   ],
   "limitations": [
@@ -174,19 +175,15 @@
     "COCO object co-occurrence is not a verified spatial or semantic relationship.",
     "Nine current pHash candidates are within-split review candidates and are not asserted duplicates."
   ],
-  "warnings": [
-    "The current test set contains 1000 images while the supplied task text describes a contradiction (100 in Section 4.1 versus 1000 in Sections 4.4.2 and 4.4.3); seek instructor clarification."
-  ],
+  "warnings": [],
   "failed_checks": [],
   "not_verifiable": [
-    "Original PDF requirement wording/page mapping.",
-    "Historical per-image EXIF correction and color-conversion counts.",
-    "Which test-set count the instructor intends."
+    "Historical per-image EXIF correction and RGB/color-conversion counts."
   ],
   "implementation_changes": [
     "Added reproducible extended analysis entry point: python main.py extended_analysis.",
     "Generated caption vocabulary/tokenization statistics, token-frequency/token-count tables and vocabulary visualizations.",
-    "Generated per-image coarse color and edge-density shape-proxy statistics and visualizations.",
+    "Generated per-image coarse color, luminance, saturation, and edge-density proxy statistics and visualizations; semantic and object-shape recognition were not attempted.",
     "Generated COCO-box geometric relation tables, summaries, per-image metadata and frequency visualization; semantic relation claims explicitly excluded.",
     "Compared letterbox, stretch and center-crop geometry on the existing 100 validation images; no historical experiment claimed."
   ],

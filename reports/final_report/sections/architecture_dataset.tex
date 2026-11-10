@@ -1,3 +1,6 @@
+% Compatibility entry point; active chapter source: chapter2_dataset.tex.
+\input{sections/chapter2_dataset}
+\endinput
 \chapter{System Architecture, Dataset, and Knowledge Base}\label{ch:architecture}
 The implemented pipeline begins with COCO source images and annotations. Frozen IDs determine split membership. Preprocessing creates normalized-shape JPEG inputs; metadata and caption files preserve source identifiers. Image and training-caption encoders emit 512-dimensional vectors with mappings back to COCO IDs. The train subset alone populates both FAISS indexes. Held-out validation and test image vectors are queried against the image index. \Cref{fig:architecture} summarizes the data flow and marks the unimplemented generation stage.
 
