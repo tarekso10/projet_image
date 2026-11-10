@@ -36,4 +36,5 @@ embeddings/*/train.npy
 vector_database/*.index
 reports/statistical_analysis/geometric_spatial_relationships.csv
 
-# Keep compact manifests, captions, metadata, reports, and figures versionable.
+# Generated reports and report outputs
+/reports/
